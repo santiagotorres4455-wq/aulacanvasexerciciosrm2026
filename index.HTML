@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Canvas Sombra Funcional</title>
+</head>
+<body>
+
+    <button onclick="ajustarSombra(-5)">- Menos Sombra</button>
+    <button onclick="ajustarSombra(5)">+ Más Sombra</button>
+    <br><br>
+
+    <canvas id="quadro" width="600" height="300"></canvas>
+
+    <script>
+        let canvas = document.getElementById("quadro");
+        let ctx = canvas.getContext("2d");
+
+        // stado inicial de la sombra
+        let sombraNivel = 10;
+
+        function dibujar() {
+            // Limpia el canvas para que no se encimen los dibujos
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            // Configuración de la sombra
+            ctx.shadowColor = "black";
+            ctx.shadowBlur = sombraNivel;
+            ctx.shadowOffsetX = sombraNivel;
+            ctx.shadowOffsetY = sombraNivel;
+
+            // Dibujo del rectángulo
+            ctx.fillStyle = "red";
+            ctx.fillRect(100, 50, 200, 100);
+        }
+
+        function ajustarSombra(valor) {
+            sombraNivel += valor;
+            if (sombraNivel < 0) sombraNivel = 0;
+            dibujar();
+        }
+
+        // Llamada inicial para que aparezca al cargar la página
+        dibujar();
+        
+    </script>
+
+</body>
+</html>

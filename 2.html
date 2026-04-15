@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Formas Geométricas no Canvas</title>
+    <style>
+        canvas {
+            border: 2px solid #333;
+            background-color: #f0f0f0;
+        }
+    </style>
+</head>
+<body>
+
+    <canvas id="meuCanvas" width="800" height="400"></canvas>
+
+    <script>
+        const canvas = document.getElementById('meuCanvas');
+        const ctx = canvas.getContext('2d');
+
+        //  cuadrado 
+        ctx.fillStyle = 'red';
+        ctx.fillRect(50, 50, 100, 100);
+
+        // rectângulo
+        ctx.fillStyle = 'blue';
+        ctx.fillRect(200, 50, 150, 100);
+
+        // triangulo
+    ctx.beginPath();
+        ctx.moveTo(450, 150); 
+        ctx.lineTo(550, 150); 
+        ctx.lineTo(500, 50);  
+        ctx.closePath();
+        ctx.fillStyle = 'green';
+        ctx.fill();
+        //triangulo rectangulo
+        ctx.beginPath();
+        ctx.moveTo(600, 50);  
+        ctx.lineTo(600, 150);
+        ctx.lineTo(750, 150); 
+        ctx.closePath();
+        ctx.fillStyle = 'orange';
+        ctx.fill();
+
+        // pentagono
+        ctx.beginPath();
+        ctx.moveTo(100, 230);
+        ctx.lineTo(160, 280); 
+        ctx.lineTo(140, 350); 
+        ctx.lineTo(60, 350);  
+        ctx.lineTo(40, 280);  
+        ctx.closePath();
+        ctx.fillStyle = 'purple';
+        ctx.fill();
+
+        // circulo
+        ctx.beginPath();
+        // arc(x, y, raio, anguloInicial, anguloFinal)
+        ctx.arc(300, 300, 60, 0, Math.PI * 2);
+        ctx.fillStyle = 'teal';
+        ctx.fill();
+
+    </script>
+</body>
+</html>

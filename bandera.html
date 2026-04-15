@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Formas Geométricas no Canvas</title>
+    <style>
+        canvas {
+            border: 2px solid #333;
+            background-color: #f0f0f0;
+        }
+    </style>
+</head>
+<body>
+
+    <canvas id="meuCanvas" width="800" height="400"></canvas>
+
+    <script>
+        const canvas = document.getElementById('meuCanvas');
+        const ctx = canvas.getContext('2d');
+
+             ctx.fillStyle = 'red'; //1
+        ctx.fillRect(0, 0, 800, 80);
+
+        
+             ctx.fillStyle = 'white'; // 2
+        ctx.fillRect(0, 80, 800, 80);
+        
+             ctx.fillStyle = 'red'; //3
+        ctx.fillRect(0, 160, 800, 80);
+        
+             ctx.fillStyle = 'white';// 4
+        ctx.fillRect(0, 240, 800, 80);
+        
+             ctx.fillStyle = 'red'; //5
+        ctx.fillRect(0, 320, 800, 80);
+
+
+
+            ctx.beginPath();
+        ctx.moveTo(0, 400); 
+        ctx.lineTo(0, 0); 
+        ctx.lineTo(400, 200);  
+        ctx.closePath();
+        ctx.fillStyle = 'blue';
+        ctx.fill();
+    </script>
+</body>
+</html>
