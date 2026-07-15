@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <script src="https://code.jquery.com/jquery-3.7.1.slim.js"
+        integrity="sha256-UgvvN8vBkgO0luPSUl2s8TIlOSYRoGFAX4jlCIm9Adc=" crossorigin="anonymous">
+        </script>
+
+    <style>
+        canvas {
+            border: 1px solid #000;
+            background: #ffc;
+        }
+    </style>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pong</title>
+</head>
+
+<body>
+
+
+    <script>
+
+
+    </script>
+
+
+
+    <canvas id="quadro" width="600" height="500"></canvas>
+
+    <script>
+
+
+        $().ready(function () {
+
+            var canvas = $("#quadro")[0]
+            var ctx = canvas.getContext("2d")
+
+            // pelota, maso mitad de la pantalla
+            var obj = {
+                x: 290,
+                y: 240,
+                vx: 3, //velocidade eixo x
+                vy: 3, //velocidade eixo y
+                cor: "red"
+            }
+
+            // raquete da esquerda 
+            var raquete1 = {
+                x: 10,
+                y: 210,
+                vy: 0,
+                cor: "blue"
+            }
+
+            // raquete da direita
+            var raquete2 = {
+                x: 570,
+                y: 210,
+                vy: 0,
+                cor: "green"
+            }
+
+            // limpa a tela pra poder redesenhar cada frame
+            function apagaTela() {
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+            }
+
+            // laco de animacao
+            function animacao() {
+                apagaTela();//apaga a tela
+
+                // mueve la pelota sumando la velocidad a la posicion
+                obj.x = obj.x + obj.vx;
+                obj.y = obj.y + obj.vy;    //atualizar parametros do obj
+
+                // mueve as raquetes segun su velocidad (que cambia con el teclado)
+                raquete1.y = raquete1.y + raquete1.vy;
+                raquete2.y = raquete2.y + raquete2.vy;
+
+               
+                // ve si la pelota choco con algun borde do canvas
+                function verificaLimiteCanvas() {
+                    if (obj.y <= 0) {
+                        obj.vy = obj.vy * -1; // cima, rebota
+                    }
+                    if (obj.y + 20 >= canvas.height) { // baixo, rebota
+                        obj.vy = obj.vy * -1;
+                    }
+                }//verificar limites
+                verificaLimiteCanvas();
+
+                // ve si la pelota paso detras de alguna raqueta -> gol
+                function verificaGol() {
+                    if (obj.x <= 0) {
+                        // la pelota paso detras de raquete1 -> punto para el jugador 2
+                        reiniciarPelota();
+                    }
+                    if (obj.x + 20 >= canvas.width) {
+                        // la pelota paso detras de raquete2 -> punto para el jugador 1
+                        reiniciarPelota();
+                    }
+                }
+
+                function reiniciarPelota() {
+                    obj.x = 290;
+                    obj.y = 240;
+                    obj.vx = obj.vx > 0 ? -3 : 3; // sale para el lado contrario a quien perdio el punto
+                    obj.vy = 3;
+                }
+
+                verificaGol();
+
+                // Tope para las raquetas (arriba/abajo)
+                function verificaLimiteRaquetes() {
+                    if (raquete1.y <= 0) {
+                        raquete1.y = 0; //tope de arriba
+                    }
+                    if (raquete1.y + 100 >= canvas.height) {
+                        raquete1.y = canvas.height - 100; //tope de abajo
+                    }
+                    if (raquete2.y <= 0) {
+                        raquete2.y = 0;
+                    }
+                    if (raquete2.y + 100 >= canvas.height) {
+                        raquete2.y = canvas.height - 100;
+                    }
+                }
+                verificaLimiteRaquetes();
+
+                // verifica colision de pelota con cada raqueta, se pega invierte vx
+                function colisaoRaquetes() {
+                    // raquete 1 (esquerda)
+                    if (obj.x <= raquete1.x + 10 && obj.y + 20 >= raquete1.y && obj.y <= raquete1.y + 100 && obj.vx < 0) {
+                        obj.vx = obj.vx * -1;
+                    }
+                    // raquete 2 (direita)
+                    if (obj.x + 20 >= raquete2.x && obj.y + 20 >= raquete2.y && obj.y <= raquete2.y + 100 && obj.vx > 0) {
+                        obj.vx = obj.vx * -1;
+                    }// verifica si las 4 condiciones son verdaderas para invertir la direccion
+                }
+                colisaoRaquetes();
+
+                // dibuja la pelota
+                ctx.fillStyle = obj.cor;
+                ctx.fillRect(obj.x, obj.y, 20, 20);    //desenhar a tela
+
+                // dibuja raquete 1
+                ctx.fillStyle = raquete1.cor;
+                ctx.fillRect(raquete1.x, raquete1.y, 10, 100);
+
+                // dibuja raquete 2
+                ctx.fillStyle = raquete2.cor;
+                ctx.fillRect(raquete2.x, raquete2.y, 10, 100);
+
+                requestAnimationFrame(animacao);    //"laco de repeticao", chama de novo
+            }
+
+
+            animacao(); //arranca loop
+
+            // segundo ready, escuta as teclas
+            $().ready(function () {
+                $(document).keydown(function (event) {
+
+
+                    if (event.which == 87) { //w
+                        raquete1.vy = -4;
+                    }
+
+
+                    if (event.which == 83) { //s
+                        raquete1.vy = 4;
+                    }
+
+
+                    if (event.which == 38) { //arriba
+                        raquete2.vy = -4;
+                    }
+
+
+                    if (event.which == 40) { //abajo
+                        raquete2.vy = 4;
+                    }
+
+
+
+
+                });
+
+                // cuando solta a tecla, para a raquete (vy = 0)
+                $(document).keyup(function (event) {
+
+                    if (event.which == 87 || event.which == 83) {
+                        raquete1.vy = 0;
+                    }
+
+                    if (event.which == 38 || event.which == 40) {
+                        raquete2.vy = 0;
+                    }
+
+                });
+            });
+
+
+        });
+
+
+    </script>
+
+</body>
+
+</html>
